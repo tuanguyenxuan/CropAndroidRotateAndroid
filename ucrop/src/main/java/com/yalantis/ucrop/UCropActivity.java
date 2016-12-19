@@ -31,6 +31,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.yalantis.ucrop.callback.BitmapCropCallback;
@@ -100,6 +101,7 @@ public class UCropActivity extends AppCompatActivity {
     private List<ViewGroup> mCropAspectRatioViews = new ArrayList<>();
     private TextView mTextViewRotateAngle, mTextViewScalePercent;
     private View mBlockingView;
+    private SeekBar mSeekbar;
 
     private Bitmap.CompressFormat mCompressFormat = DEFAULT_COMPRESS_FORMAT;
     private int mCompressQuality = DEFAULT_COMPRESS_QUALITY;
@@ -292,15 +294,40 @@ public class UCropActivity extends AppCompatActivity {
             mWrapperStateRotate.setOnClickListener(mStateClickListener);
             mWrapperStateScale = (ViewGroup) findViewById(R.id.state_scale);
             mWrapperStateScale.setOnClickListener(mStateClickListener);
-
+            mSeekbar = (SeekBar) findViewById(R.id.seekBar);
             mLayoutAspectRatio = (ViewGroup) findViewById(R.id.layout_aspect_ratio);
             mLayoutRotate = (ViewGroup) findViewById(R.id.layout_rotate_wheel);
             mLayoutScale = (ViewGroup) findViewById(R.id.layout_scale_wheel);
+            mSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if(fromUser){
+                        float currentRotate = mGestureCropImageView.getCurrentAngle();
+                        mGestureCropImageView.postRotate((float) (90 - progress) - currentRotate);
+//                        mGestureCropImageView.postRotate(1);
+//                        rotateByAngle((50 - progress) / ROTATE_WIDGET_SENSITIVITY_COEFFICIENT);
+                    }
+                }
 
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    mGestureCropImageView.cancelAllAnimations();
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    mGestureCropImageView.setImageToWrapCropBounds();
+                    mGestureCropImageView.setImageToWrapCropBounds();
+                }
+            });
             setupAspectRatioWidget(intent);
             setupRotateWidget();
             setupScaleWidget();
             setupStatesWrapper();
+
+            mWrapperStateScale.setSelected(false);
+            mWrapperStateRotate.setSelected(true);
+            setWidgetState(R.id.state_rotate);
         }
     }
 
@@ -521,7 +548,7 @@ public class UCropActivity extends AppCompatActivity {
 
     private void setAngleText(float angle) {
         if (mTextViewRotateAngle != null) {
-            mTextViewRotateAngle.setText(String.format(Locale.getDefault(), "%.1f°", angle));
+//            mTextViewRotateAngle.setText(String.format(Locale.getDefault(), "%.1f°", angle));
         }
     }
 
@@ -555,7 +582,7 @@ public class UCropActivity extends AppCompatActivity {
             if (mWrapperStateAspectRatio.getVisibility() == View.VISIBLE) {
                 setWidgetState(R.id.state_aspect_ratio);
             } else {
-                setWidgetState(R.id.state_scale);
+                setWidgetState(R.id.state_rotate);
             }
         } else {
             setAllowedGestures(0);
@@ -573,13 +600,13 @@ public class UCropActivity extends AppCompatActivity {
         mLayoutRotate.setVisibility(stateViewId == R.id.state_rotate ? View.VISIBLE : View.GONE);
         mLayoutScale.setVisibility(stateViewId == R.id.state_scale ? View.VISIBLE : View.GONE);
 
-        if (stateViewId == R.id.state_scale) {
+//        if (stateViewId == R.id.state_scale) {
             setAllowedGestures(0);
-        } else if (stateViewId == R.id.state_rotate) {
-            setAllowedGestures(1);
-        } else {
-            setAllowedGestures(2);
-        }
+//        } else if (stateViewId == R.id.state_rotate) {
+//            setAllowedGestures(1);
+//        } else {
+//            setAllowedGestures(2);
+//        }
     }
 
     private void setAllowedGestures(int tab) {

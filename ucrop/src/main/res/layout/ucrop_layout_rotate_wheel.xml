@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                tools:showIn="@layout/ucrop_activity_photobox"
-                tools:visibility="visible">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    android:layout_gravity="center"
+    tools:showIn="@layout/ucrop_activity_photobox"
+    tools:visibility="visible">
 
     <TextView
         android:id="@+id/text_view_rotate"
         style="@style/ucrop_TextViewWidgetText"
-        android:text="100°"/>
+        android:text="傾き" />
 
     <com.yalantis.ucrop.view.widget.HorizontalProgressWheelView
         android:id="@+id/rotate_scroll_wheel"
@@ -20,16 +21,44 @@
         android:layout_toEndOf="@+id/wrapper_reset_rotate"
         android:layout_toLeftOf="@+id/wrapper_rotate_by_angle"
         android:layout_toRightOf="@+id/wrapper_reset_rotate"
-        android:layout_toStartOf="@+id/wrapper_rotate_by_angle"/>
+        android:layout_toStartOf="@+id/wrapper_rotate_by_angle"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rotate_scroll_wheel"
+        android:visibility="visible"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:src="@drawable/bg_wheet"/>
+
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="180"
+            android:progressDrawable="@android:color/transparent"
+            android:layout_centerInParent="true"
+            android:thumb="@drawable/crop_thumb"
+            android:progress="90" />
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/wrapper_reset_rotate"
         style="@style/ucrop_WrapperRotateButton"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:visibility="gone">
 
         <ImageView
             style="@style/ucrop_ImageViewWidgetIcon"
-            android:src="@drawable/ucrop_ic_reset"/>
+            android:src="@drawable/ucrop_ic_reset" />
 
     </FrameLayout>
 
@@ -38,11 +67,12 @@
         style="@style/ucrop_WrapperRotateButton"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:visibility="gone">
 
         <ImageView
             style="@style/ucrop_ImageViewWidgetIcon"
-            android:src="@drawable/ucrop_ic_angle"/>
+            android:src="@drawable/ucrop_ic_angle" />
 
     </FrameLayout>
 

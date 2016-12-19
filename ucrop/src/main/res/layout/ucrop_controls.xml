@@ -39,6 +39,7 @@
         android:background="@color/ucrop_color_widget_background"
         android:baselineAligned="false"
         android:gravity="center"
+        android:visibility="invisible"
         android:orientation="horizontal">
 
         <FrameLayout
